@@ -2,13 +2,13 @@
 
 PWD=`pwd`
 
-horizon=400
+horizon=1000
 port=5001
-nRuns=100
+nRuns=2000
 hostname="localhost"
 banditFile="$PWD/data/instance-5.txt"
 
-algorithm="rr"
+algorithm="epsilon-greedy"
 # Allowed values for algorithm parameter(case-sensitive)
 # 1. epsilon-greedy 
 # 2. UCB 
@@ -16,7 +16,7 @@ algorithm="rr"
 # 4. Thompson-Sampling
 # 5. rr
 
-epsilon=0.0
+epsilon=0.1
 
 numArms=$(wc -l $banditFile | cut -d" " -f1 | xargs)
 
@@ -25,19 +25,39 @@ CLIENTDIR=./client
 
 OUTPUTFILE=$PWD/serverlog.txt
 
-randomSeed=0
+for i in  $(seq 1 $nRuns)
+do
+   echo $i
+   randomSeed=`date +"%s"`
 
-pushd $SERVERDIR
-cmd="./startserver.sh $numArms $horizon $port $banditFile $randomSeed $OUTPUTFILE &"
-#echo $cmd
-$cmd 
-popd
+   pushd $SERVERDIR
+   cmd="./startserver.sh $numArms $horizon $port $banditFile $randomSeed $OUTPUTFILE &"
+   #echo $cmd
+   $cmd 
+   popd
 
-sleep 1
+   sleep 1
 
-pushd $CLIENTDIR
-cmd="./startclient.sh $numArms $horizon $hostname $port $randomSeed $algorithm $epsilon&"
-#echo $cmd
-$cmd > /dev/null 
-popd
+   pushd $CLIENTDIR
+   cmd="./startclient.sh $numArms $horizon $hostname $port $randomSeed $algorithm $epsilon"
+   #echo $cmd
+   $cmd > ../temp1
+   if [ $(cat ../temp1 | wc -l) -eq 1002 ]
+   then
+      if [ "$i" -eq "1" ]
+      then
+         cat ../temp1 > ../output.csv
+      else
+         cat ../temp1 | paste -d',' ../output.csv - > ../temp
+         cat ../temp > ../output.csv
+      fi
+   fi
+   popd
+
+   sleep 1
+done
+
+rm -rf temp temp1
+
+
 

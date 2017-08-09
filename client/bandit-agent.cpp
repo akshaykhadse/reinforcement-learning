@@ -33,7 +33,6 @@ void options(){
 
 }
 
-
 /*
   Read command line arguments, and set the ones that are passed (the others remain default.)
 */
@@ -108,12 +107,54 @@ bool setRunParameters(int argc, char *argv[], int &numArms, int &randomSeed, uns
 
 /* ============================================================================= */
 /* Write your algorithms here */
-int sampleArm(string algorithm, double epsilon, int pulls, float reward, int numArms){
+
+int getIndexOfLargestElement(float arr[], int size) {
+    int largestIndex = 0;
+    for (int index = largestIndex; index < size; index++) {
+        if (arr[largestIndex] < arr[index]) {
+            largestIndex = index;
+        }
+    }
+    return largestIndex;
+}
+
+int *pullsDone;
+float *rewardsGot;
+float *value;
+
+int sampleArm(string algorithm, double epsilon, int pulls, float reward, int numArms, int pArmPulled = 0){
+  int rNum;
   if(algorithm.compare("rr") == 0){
     return(pulls % numArms);
   }
   else if(algorithm.compare("epsilon-greedy") == 0){
-    return(pulls % numArms);
+    rNum = rand() % 100;
+
+    if(pulls == 0){
+      pullsDone = new int[numArms];
+      rewardsGot = new float[numArms];
+      value = new float[numArms];
+      for(int i=0; i<numArms; i++){
+        pullsDone[i] = 0;
+        rewardsGot[i] = 0.0;
+        value[i] = 0.0;
+      }
+      return rNum % numArms;
+    }
+
+    if(rNum > (int)((float)epsilon*100.0)){
+      //cout << "Exploit" << endl;
+      rewardsGot[pArmPulled] += reward;
+      pullsDone[pArmPulled] += 1;
+      value[pArmPulled] = rewardsGot[pArmPulled] / (float)pullsDone[pArmPulled];
+      return getIndexOfLargestElement(value, sizeof(value));
+    }else{
+      //cout << "explore" << endl;
+      rewardsGot[pArmPulled] += reward;
+      pullsDone[pArmPulled] += 1;
+      value[pArmPulled] = rewardsGot[pArmPulled] / (float)pullsDone[pArmPulled];
+      return rNum % numArms;
+    }
   }
   else if(algorithm.compare("UCB") == 0){
     return(pulls % numArms);
@@ -141,6 +182,7 @@ int main(int argc, char *argv[]){
   int port = 5000;
   string algorithm="random";
   double epsilon=0.0;
+  srand(randomSeed);
 
   //Set from command line, if any.
   if(!(setRunParameters(argc, argv, numArms, randomSeed, horizon, hostname, port, algorithm, epsilon))){
@@ -187,23 +229,28 @@ int main(int argc, char *argv[]){
   
   sprintf(sendBuf, "%d", armToPull);
 
-  cout << "Sending action " << armToPull << ".\n";
+  //cout << "Sending action " << armToPull << ".\n";
   while(send(socketHandle, sendBuf, strlen(sendBuf)+1, MSG_NOSIGNAL) >= 0){
 
     char temp;
     recv(socketHandle, recvBuf, 256, 0);
     sscanf(recvBuf, "%f %c %lu", &reward, &temp, &pulls);
-    cout << "Received reward " << reward << ".\n";
-    cout<<"Num of  pulls "<<pulls<<".\n";
+    //cout << "Received reward " << reward << ".\n";
+    //cout<<"Num of  pulls "<<pulls<<".\n";
+    cout << reward << endl;
 
-
-    armToPull = sampleArm(algorithm, epsilon, pulls, reward, numArms);
+    //epsilon *= 0.95;
+    armToPull = sampleArm(algorithm, epsilon, pulls, reward, numArms, armToPull);
 
     sprintf(sendBuf, "%d", armToPull);
-    cout << "Sending action " << armToPull << ".\n";
+    //cout << "Sending action " << armToPull << ".\n";
   }
   
   close(socketHandle);
+
+  delete[]pullsDone;
+  delete[]rewardsGot;
+  delete[]value;
 
   cout << "Terminating.\n";
 
