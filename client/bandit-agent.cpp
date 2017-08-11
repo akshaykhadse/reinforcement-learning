@@ -22,7 +22,7 @@ using namespace std;
 void options(){
 
   cout << "Usage:\n";
-  cout << "bandit-agent\n"; 
+  cout << "bandit-agent\n";
   cout << "\t[--numArms numArms]\n";
   cout << "\t[--randomSeed randomSeed]\n";
   cout << "\t[--horizon horizon]\n";
@@ -108,7 +108,7 @@ bool setRunParameters(int argc, char *argv[], int &numArms, int &randomSeed, uns
 /* ============================================================================= */
 /* Write your algorithms here */
 
-int getIndexOfLargestElement(float arr[], int size) {
+int getIndexOfLargestElement(double arr[], int size) {
     int largestIndex = 0;
     for (int index = largestIndex; index < size; index++) {
         if (arr[largestIndex] < arr[index]) {
@@ -120,54 +120,162 @@ int getIndexOfLargestElement(float arr[], int size) {
 
 int *pullsDone;
 float *rewardsGot;
-float *value;
+double *eMean;
+double *ucb;
+double *qMax;
+double *beta;
+gsl_rng * r;  // pointer to a global random no generator
+
+void eMeanUpdate(float reward, int pArmPulled){
+  rewardsGot[pArmPulled] += reward;
+  pullsDone[pArmPulled] += 1;
+  eMean[pArmPulled] = (double)rewardsGot[pArmPulled] / (double)pullsDone[pArmPulled];
+}
+
+void ucbUpdate(float reward, int pulls, int pArmPulled){
+  eMeanUpdate(reward, pArmPulled);
+  ucb[pArmPulled] = (double)eMean[pArmPulled] + sqrt((double)2.0*(log(pulls))/(double)pullsDone[pArmPulled]);
+  //cout << sqrt(2.0*(float)(log(pulls))/(float)pullsDone[pArmPulled]) << endl;
+}
+
+void updateQMax(float reward, int pulls, int numArms, int pArmPulled){
+  eMeanUpdate(reward, pArmPulled);
+  double delta = 1e-8;
+  double epsilon = 1e-10;
+  for(int i=0; i<numArms; i++){
+    bool converged = false;
+    double p = max((double)eMean[i], delta);
+    double q = p + delta;
+    for(int j=0;(j<100&&!converged);++j){
+      double kl = p * log(p/q) + (1-p)*log((1-p)/(1-q));
+      double dkl = (q-p)/(q*(1.0-q));
+      double f  = log(pulls)/(double)pullsDone[i] - kl;
+      double df = - dkl;
+      if(f*f < epsilon){
+        converged=true;
+        break;
+      }
+      q = min(1-delta, max(q-f/df, p+delta));
+    }
+    if(!converged){
+      //cout << "WARNING:Newton iteration in KL-UCB algorithm did not converge!!" << endl;
+    }
+    qMax[i] = q;
+  }
+}
 
 int sampleArm(string algorithm, double epsilon, int pulls, float reward, int numArms, int pArmPulled = 0){
-  int rNum;
   if(algorithm.compare("rr") == 0){
     return(pulls % numArms);
   }
   else if(algorithm.compare("epsilon-greedy") == 0){
-    rNum = rand() % 100;
+    int rNum = rand() % 100;
 
     if(pulls == 0){
       pullsDone = new int[numArms];
       rewardsGot = new float[numArms];
-      value = new float[numArms];
+      eMean = new double[numArms];
       for(int i=0; i<numArms; i++){
         pullsDone[i] = 0;
         rewardsGot[i] = 0.0;
-        value[i] = 0.0;
+        eMean[i] = (double)0;
       }
       return rNum % numArms;
-    }
-
-    if(rNum > (int)((float)epsilon*100.0)){
-      //cout << "Exploit" << endl;
-      rewardsGot[pArmPulled] += reward;
-      pullsDone[pArmPulled] += 1;
-      value[pArmPulled] = rewardsGot[pArmPulled] / (float)pullsDone[pArmPulled];
-      return getIndexOfLargestElement(value, sizeof(value));
     }else{
-      //cout << "explore" << endl;
-      rewardsGot[pArmPulled] += reward;
-      pullsDone[pArmPulled] += 1;
-      value[pArmPulled] = rewardsGot[pArmPulled] / (float)pullsDone[pArmPulled];
-      return rNum % numArms;
+      eMeanUpdate(reward, pArmPulled);
+      if(rNum > (int)((float)epsilon*100.0)){
+        return getIndexOfLargestElement(eMean, numArms);
+      }else{
+        return rNum % numArms;
+      }
     }
   }
   else if(algorithm.compare("UCB") == 0){
-    return(pulls % numArms);
+    if(pulls == 0){
+      pullsDone = new int[numArms];
+      rewardsGot = new float[numArms];
+      eMean = new double[numArms];
+      ucb = new double[numArms];
+      for(int i=0; i<numArms; i++){
+        pullsDone[i] = 0;
+        rewardsGot[i] = 0.0;
+        eMean[i] = (double)0;
+        ucb[i] = (double)0;
+      }
+      return pulls % numArms;
+    }else{
+      ucbUpdate(reward, pulls, pArmPulled);
+      if(pulls < numArms){
+        return pulls % numArms;
+      }else{
+        return getIndexOfLargestElement(ucb, numArms);
+      }
+    }
   }
   else if(algorithm.compare("KL-UCB") == 0){
-    return(pulls % numArms);
+    if(pulls == 0){
+      pullsDone = new int[numArms];
+      rewardsGot = new float[numArms];
+      eMean = new double[numArms];
+      qMax = new double[numArms];
+      for(int i=0; i<numArms; i++){
+        pullsDone[i] = 0;
+        rewardsGot[i] = 0.0;
+        eMean[i] = (double)0;
+        qMax[i] = (double)0;
+      }
+      return pulls % numArms;
+    }else{
+      updateQMax(reward, pulls, numArms, pArmPulled);
+      if(pulls < numArms){
+        return pulls % numArms;
+      }else{
+        return getIndexOfLargestElement(qMax, numArms);
+      }
+    }
   }
   else if(algorithm.compare("Thompson-Sampling") == 0){
-    return(pulls % numArms);
-  }
+    if(pulls == 0){
+      pullsDone = new int[numArms];
+      rewardsGot = new float[numArms];
+      eMean = new double[numArms];
+      beta = new double[numArms];
+      for(int i=0; i<numArms; i++){
+        pullsDone[i] = 0;
+        rewardsGot[i] = 0.0;
+        eMean[i] = (double)0;
+        beta[i] = (double)0;
+      }
+    }
+    eMeanUpdate(reward, pArmPulled);
+    for(int i=0; i<numArms; i++){
+      beta[i] = gsl_ran_beta (r, rewardsGot[i] + 1.0, (float)pullsDone[i] - rewardsGot[i] + 1.0);
+    }
+    return getIndexOfLargestElement(beta, numArms);
+    }
   else{
     return -1;
   }
+}
+
+void deleteArrays(string algorithm){
+    if(algorithm.compare("epsilon-greedy") == 0){
+        delete[]pullsDone;
+        delete[]rewardsGot;
+        delete[]eMean;
+    }
+    else if(algorithm.compare("UCB") == 0){
+        delete[]pullsDone;
+        delete[]rewardsGot;
+        delete[]eMean;
+        delete[]ucb;
+    }
+    else if(algorithm.compare("Thompson-Sampling") == 0){
+        delete[]pullsDone;
+        delete[]rewardsGot;
+        delete[]eMean;
+        delete[]beta;
+    }    
 }
 
 /* ============================================================================= */
@@ -183,6 +291,13 @@ int main(int argc, char *argv[]){
   string algorithm="random";
   double epsilon=0.0;
   srand(randomSeed);
+  
+  // have to do these things first - they are explained in manual
+  const gsl_rng_type * T;
+  gsl_rng_env_setup();
+  T = gsl_rng_default;
+  r = gsl_rng_alloc (T);
+  gsl_rng_set (r, time(0));
 
   //Set from command line, if any.
   if(!(setRunParameters(argc, argv, numArms, randomSeed, horizon, hostname, port, algorithm, epsilon))){
@@ -196,7 +311,7 @@ int main(int argc, char *argv[]){
   int socketHandle;
 
   bzero(&remoteSocketInfo, sizeof(sockaddr_in));
-  
+
   if((hPtr = gethostbyname((char*)(hostname.c_str()))) == NULL){
     cerr << "System DNS name resolution not configured properly." << "\n";
     cerr << "Error number: " << ECONNREFUSED << "\n";
@@ -226,7 +341,7 @@ int main(int argc, char *argv[]){
   float reward = 0;
   unsigned long int pulls=0;
   int armToPull = sampleArm(algorithm, epsilon, pulls, reward, numArms);
-  
+
   sprintf(sendBuf, "%d", armToPull);
 
   //cout << "Sending action " << armToPull << ".\n";
@@ -245,15 +360,15 @@ int main(int argc, char *argv[]){
     sprintf(sendBuf, "%d", armToPull);
     //cout << "Sending action " << armToPull << ".\n";
   }
-  
+
   close(socketHandle);
+  
+  // at end of program must get rid of memory used by the generator
+  gsl_rng_free (r);
 
-  delete[]pullsDone;
-  delete[]rewardsGot;
-  delete[]value;
+  deleteArrays(algorithm);
 
-  cout << "Terminating.\n";
+  //cout << "Terminating.\n";
 
   return 0;
 }
-          
