@@ -108,6 +108,7 @@ bool setRunParameters(int argc, char *argv[], int &numArms, int &randomSeed, uns
 /* ============================================================================= */
 /* Write your algorithms here */
 
+// Function to get index of largest element of array
 int getIndexOfLargestElement(double arr[], int size) {
     int largestIndex = 0;
     for (int index = largestIndex; index < size; index++) {
@@ -118,26 +119,31 @@ int getIndexOfLargestElement(double arr[], int size) {
     return largestIndex;
 }
 
+// Pointers for all required arrays
 int *pullsDone;
 float *rewardsGot;
 double *eMean;
 double *ucb;
 double *qMax;
 double *beta;
-gsl_rng * r;  // pointer to a global random no generator
 
+// Pointer to random number generator
+gsl_rng * r;  
+
+// Function to update empirical mean
 void eMeanUpdate(float reward, int pArmPulled){
   rewardsGot[pArmPulled] += reward;
   pullsDone[pArmPulled] += 1;
   eMean[pArmPulled] = (double)rewardsGot[pArmPulled] / (double)pullsDone[pArmPulled];
 }
 
+// Function to update UCB values
 void ucbUpdate(float reward, int pulls, int pArmPulled){
   eMeanUpdate(reward, pArmPulled);
   ucb[pArmPulled] = (double)eMean[pArmPulled] + sqrt((double)2.0*(log(pulls))/(double)pullsDone[pArmPulled]);
-  //cout << sqrt(2.0*(float)(log(pulls))/(float)pullsDone[pArmPulled]) << endl;
 }
 
+// Function to update qmax values
 void updateQMax(float reward, int pulls, int numArms, int pArmPulled){
   eMeanUpdate(reward, pArmPulled);
   double delta = 1e-8;
@@ -148,17 +154,13 @@ void updateQMax(float reward, int pulls, int numArms, int pArmPulled){
     double q = p + delta;
     for(int j=0;(j<100&&!converged);++j){
       double kl = p * log(p/q) + (1-p)*log((1-p)/(1-q));
-      double dkl = (q-p)/(q*(1.0-q));
       double f  = log(pulls)/(double)pullsDone[i] - kl;
-      double df = - dkl;
+      double df = - (q-p)/(q*(1.0-q));
       if(f*f < epsilon){
         converged=true;
         break;
       }
       q = min(1-delta, max(q-f/df, p+delta));
-    }
-    if(!converged){
-      //cout << "WARNING:Newton iteration in KL-UCB algorithm did not converge!!" << endl;
     }
     qMax[i] = q;
   }
@@ -172,6 +174,7 @@ int sampleArm(string algorithm, double epsilon, int pulls, float reward, int num
     int rNum = rand() % 100;
 
     if(pulls == 0){
+      // Initialize required arrays with zeros
       pullsDone = new int[numArms];
       rewardsGot = new float[numArms];
       eMean = new double[numArms];
@@ -192,6 +195,7 @@ int sampleArm(string algorithm, double epsilon, int pulls, float reward, int num
   }
   else if(algorithm.compare("UCB") == 0){
     if(pulls == 0){
+      // Initialize required arrays with zeros
       pullsDone = new int[numArms];
       rewardsGot = new float[numArms];
       eMean = new double[numArms];
@@ -202,11 +206,11 @@ int sampleArm(string algorithm, double epsilon, int pulls, float reward, int num
         eMean[i] = (double)0;
         ucb[i] = (double)0;
       }
-      return pulls % numArms;
+      return pulls;
     }else{
       ucbUpdate(reward, pulls, pArmPulled);
       if(pulls < numArms){
-        return pulls % numArms;
+        return pulls;
       }else{
         return getIndexOfLargestElement(ucb, numArms);
       }
@@ -214,6 +218,7 @@ int sampleArm(string algorithm, double epsilon, int pulls, float reward, int num
   }
   else if(algorithm.compare("KL-UCB") == 0){
     if(pulls == 0){
+      // Initialize required arrays with zeros
       pullsDone = new int[numArms];
       rewardsGot = new float[numArms];
       eMean = new double[numArms];
@@ -224,11 +229,11 @@ int sampleArm(string algorithm, double epsilon, int pulls, float reward, int num
         eMean[i] = (double)0;
         qMax[i] = (double)0;
       }
-      return pulls % numArms;
+      return pulls;
     }else{
       updateQMax(reward, pulls, numArms, pArmPulled);
       if(pulls < numArms){
-        return pulls % numArms;
+        return pulls;
       }else{
         return getIndexOfLargestElement(qMax, numArms);
       }
@@ -236,6 +241,7 @@ int sampleArm(string algorithm, double epsilon, int pulls, float reward, int num
   }
   else if(algorithm.compare("Thompson-Sampling") == 0){
     if(pulls == 0){
+      // Initialize required arrays with zeros
       pullsDone = new int[numArms];
       rewardsGot = new float[numArms];
       eMean = new double[numArms];
@@ -252,12 +258,13 @@ int sampleArm(string algorithm, double epsilon, int pulls, float reward, int num
       beta[i] = gsl_ran_beta (r, rewardsGot[i] + 1.0, (float)pullsDone[i] - rewardsGot[i] + 1.0);
     }
     return getIndexOfLargestElement(beta, numArms);
-    }
+  }
   else{
     return -1;
   }
 }
 
+// Free memory used by arrays
 void deleteArrays(string algorithm){
     if(algorithm.compare("epsilon-greedy") == 0){
         delete[]pullsDone;

@@ -1,0 +1,6 @@
+algorithm,epsilon,horizon,nRuns,numArms,regret
+epsilon-greedy,0.1,1000,2000,25,552.6165
+UCB,0.1,1000,2000,25,234.9515
+KL-UCB,0.1,1000,2000,25,63.0385
+Thompson-Sampling,0.1,1000,2000,25,49.959
+rr,0.1,1000,2000,25,508.364

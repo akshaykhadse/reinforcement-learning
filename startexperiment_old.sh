@@ -2,13 +2,13 @@
 
 PWD=`pwd`
 
-horizon=500
+horizon=100000
 port=5001
-nRuns=1
+nRuns=200
 hostname="localhost"
 banditFile="$PWD/data/instance-5.txt"
 
-algorithm="Thompson-Sampling"
+algorithm="UCB"
 # Allowed values for algorithm parameter(case-sensitive)
 # 1. epsilon-greedy
 # 2. UCB

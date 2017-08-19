@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Started"
+#echo "Started"
 
 PWD=`pwd`
 
@@ -9,7 +9,7 @@ nRuns=200
 hostname="localhost"
 #banditFile="$PWD/data/instance-5.txt"
 
-echo "Reached Algo Selection"
+#echo "Reached Algo Selection"
 #algorithm="Thompson-Sampling"
 # Allowed values for algorithm parameter(case-sensitive)
 # 1. epsilon-greedy
@@ -20,10 +20,10 @@ echo "Reached Algo Selection"
 
 epsilon=0.2
 
-echo "Reached numArm Calculation"
+#echo "Reached numArm Calculation"
 #numArms=$(wc -l $banditFile | cut -d" " -f1 | xargs)
 
-echo "Filenames"
+#echo "Filenames"
 SERVERDIR=./server
 CLIENTDIR=./client
 
@@ -32,7 +32,7 @@ OUTPUTFILE=$PWD/serverlog.txt
 #rewardFile=$PWD/$algorithm-$epsilon-$horizon-$nRuns-instance$numArms.csv
 #resultFile=$PWD/result-$algorithm-$epsilon-$horizon-$nRuns-instance$numArms.csv
 
-echo "Entering Bandit File Loop"
+#echo "Entering Bandit File Loop"
 for banditFile in $PWD/data/instance*
 do
    numArms=$(wc -l $banditFile | cut -d" " -f1 | xargs)
@@ -80,7 +80,7 @@ do
             rm -rf $resultFile
          fi
 
-         cmd="python3 process.py $horizon $rewardFile $resultFile"
+         cmd="python process.py $horizon $rewardFile $resultFile"
          $cmd
  
          rm -rf temp1.txt temp2.txt $rewardFile
