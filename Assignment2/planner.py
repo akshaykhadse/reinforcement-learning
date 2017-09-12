@@ -89,10 +89,11 @@ def find_v(T, R, gamma, policy):
     V0 = np.zeros(T.shape[0])
 
     while(1):
-    # Until the V1 and V0 are close enough element wise
+        # Until the V1 and V0 are close enough element wise
         for s in range(T.shape[0]):
             # Find the V1
-            V1[s] = np.sum(T[s, policy[s], :] * R[s, policy[s], :] + gamma * T[s, policy[s], :] * V0)
+            V1[s] = np.sum(T[s, policy[s], :] * R[s, policy[s], :] +
+                           gamma * T[s, policy[s], :] * V0)
         # If V1 and V0 are close enough
         if np.allclose(V1, V0, rtol=1e-13, atol=1e-15):
             break
@@ -142,7 +143,8 @@ def hpi(T, R, gamma):
             if (Q[s][policy[s]] < np.amax(Q[s][:])):
                 improvable_states.append(s)
 
-        # If there are improvable states, switch the action for each improvable state
+        # If there are improvable states,
+        # switch the action for each improvable state
         if len(improvable_states) > 0:
                 for k in improvable_states:
                     policy[k] = 1 - policy[k]
@@ -184,9 +186,10 @@ def rpi(T, R, gamma):
                 improvable_states.append(s)
 
         if len(improvable_states) > 0:
-            # From the set of improving states, pick random subset and switch its states
-            # Subset should be non empty and its elements must to be repeated
-            for i in range(np.random.choice(range(len(improvable_states)))+1):
+            # From the set of improving states, pick random non empty subset
+            # and switch actions of all these states
+            for i in range(np.random.choice(range(
+                           len(improvable_states))) + 1):
                 j = np.random.choice(improvable_states)
                 policy[j] = 1 - policy[j]
                 improvable_states.remove(j)
@@ -213,8 +216,8 @@ def bspi(T, R, gamma, batch_size):
     # then the one on left to it and so on
     for i in reversed(range(0, T.shape[0], batch_size)):
 
-        if i+batch_size-1 < T.shape[0]:
-            batch = range(i, i+batch_size)
+        if i + batch_size - 1 < T.shape[0]:
+            batch = range(i, i + batch_size)
         else:
             batch = range(i, T.shape[0])
 
@@ -235,10 +238,11 @@ def bspi(T, R, gamma, batch_size):
                 if (Q[s][policy[s]] < np.amax(Q[s][:])):
                     improvable_states.append(s)
 
-            # If there are improvable states, switch the action for each improvable state
+            # If there are improvable states,
+            # switch the action for each improvable state
             if len(improvable_states) > 0:
-                    for k in improvable_states:  # For each improvable state
-                        policy[k] = 1 - policy[k] # Switch the action
+                    for k in improvable_states:     # For each improvable state
+                        policy[k] = 1 - policy[k]   # Switch the action
             else:
                 # If no improvable states, reset the flag
                 changed = 0
@@ -269,7 +273,8 @@ def solve_lp(T, R, gamma):
             # Add constraint to LP for each state and action
             formula = 0.0
             for sPrime in range(T.shape[2]):
-                formula += T[s, a, sPrime] * (R[s, a, sPrime] + gamma * decision_variables[sPrime])
+                formula += (T[s, a, sPrime] * (R[s, a, sPrime] +
+                            gamma * decision_variables[sPrime]))
             prob += decision_variables[s] >= formula
 
     # Solve the LP Problem and get results in V

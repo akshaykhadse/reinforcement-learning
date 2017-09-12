@@ -1,4 +1,3 @@
-import time
 import os
 import numpy as np
 
@@ -22,7 +21,8 @@ def write_mdp(filename, S, A, R, T, gamma):
     for s in range(S):
         for a in range(A):
             for sPrime in range(S):
-                mdpfile.write(str.format("{0:.6f}",R[s][a][sPrime]) + "\t".rstrip('\n'))
+                mdpfile.write(str.format("{0:.6f}",
+                              R[s][a][sPrime]) + "\t".rstrip('\n'))
 
             mdpfile.write("\n")
 
@@ -30,12 +30,13 @@ def write_mdp(filename, S, A, R, T, gamma):
     for s in range(S):
         for a in range(A):
             for sPrime in range(S):
-                mdpfile.write(str.format("{0:.6f}",T[s][a][sPrime]) + "\t".rstrip('\n'))
+                mdpfile.write(str.format("{0:.6f}",
+                              T[s][a][sPrime]) + "\t".rstrip('\n'))
 
             mdpfile.write("\n")
 
     # Write gamma
-    mdpfile.write(str.format("{0:.2f}",gamma))
+    mdpfile.write(str.format("{0:.2f}", gamma))
     mdpfile.write("\n")
 
     mdpfile.close()
@@ -60,16 +61,17 @@ for i in range(outputFileNumber):
             break
 
     # Construct the filename
-    fn = './generated/newMDP'+ str.format("{0:02d}", i) + '.txt'
+    fn = './generated/newMDP' + str.format("{0:02d}", i) + '.txt'
 
     # Initialize transition and reward arrays
-    T = np.zeros((S,A,S))
-    R = np.zeros((S,A,S))
+    T = np.zeros((S, A, S))
+    R = np.zeros((S, A, S))
 
     # For each initial state and each action
     for s in range(S):
         for a in range(A):
-            # Generate a random vector of 0s and 1s coreesponding to each sPrime
+            # Generate a random vector of 0s and 1s
+            # corresponding to each sPrime
             while 1:
                 k = np.sum([np.random.choice([0, 1]) for i in range(S)])
                 # Making sure that there is atleat one transition exists
@@ -84,7 +86,7 @@ for i in range(outputFileNumber):
             R[s][a] = (k * (2 * np.random.random(S) - np.ones(S)))
 
     # Generate a random gamma
-    g = np.random.uniform(0,1)
+    g = np.random.uniform(0, 1)
 
     # Write S, A, R, T and gamma to file
     write_mdp(fn, S, A, R, T, g)
