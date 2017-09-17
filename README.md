@@ -1,8 +1,5 @@
 # Reinforcement Learning
-
-Repository for CS747 Intelligent and Learning Agents Course
-
-This repo contains implementations of basic concepts dealt under the Rienforcement Learning Umbrella
+This repo contains implementations of basic concepts dealt under the Rienforcement Learning umbrella
 
 ### [Multi Armed Bandits](Multi-Armed-Bandits#multi-armed-bandits)
 
