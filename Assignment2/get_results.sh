@@ -6,8 +6,7 @@ FILES=generated/*
 
 # Comaparison of algorithms
 for ALGORITHM in hpi rpi bspi
-do
-  BATCHSIZE=50
+sds  BATCHSIZE=50
   RANDOMSEED=`date +%s%N | cut -c 11-`
   rm -rf $ALGORITHM.txt 2> /dev/null
   for MDP in $FILES
