@@ -1,5 +1,7 @@
 # Multi Armed Bandits
 
+Download report [here](report/report.pdf)
+
 In this repo, you will find the implemention and comparison of different algorithms for sampling the arms of a stochastic multi-armed bandit. Each arm provides i.i.d. rewards from a fixed Bernoulli distribution. The objective is to minimise regret. The algorithms implemented are epsilon-greedy exploration, UCB, KL-UCB, and Thompson Sampling.
 
 ### Enviornment Code
