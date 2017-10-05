@@ -14,6 +14,8 @@ parser.add_argument('-gamma', '--gamma', dest='gamma', type=float, default=1, he
 parser.add_argument('-lambda', '--lambda', dest='lamb', type=float, default=0, help='Value of lambda')
 parser.add_argument('-trace', '--trace', dest='trace', type=str, default='accum', help='Value of trace {accum, replace}')
 parser.add_argument('-rs', '--randomseed', dest='randomseed', type=int, default=0, help='Seed for RNG.')
+parser.add_argument('-al', '--alpha', dest='alpha', type=float, default=0.1, help='Learning Rate')
+parser.add_argument('-ep', '--epsilon', dest='epsilon', type=float, default=0.2, help='Exploration Rate')
 args = parser.parse_args()
 
 
@@ -43,7 +45,7 @@ try:
     numStates, state = map(int, getResponse('info').strip().split())
     print('Number of States: {}, Current State: {}\n=========='.format(numStates, state))
 
-    agent = Agent(numStates, state, args.gamma, args.lamb, args.algorithm.lower(), args.randomseed)
+    agent = Agent(numStates, state, args.gamma, args.lamb, args.algorithm.lower(), args.randomseed, args.trace, args.alpha, args.epsilon)
 
     while True:
         action = agent.getAction() # Take action
