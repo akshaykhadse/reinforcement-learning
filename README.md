@@ -8,7 +8,7 @@ Here, you will find the implemention and comparison of different algorithms for 
 
 ### [Markovian Decision Processes](Markovian-Decision-Processes#markovian-decision-processes)
 
-Markovian decision processes find application in problems wher a decision is to be made on basis of previous outcomes.
+Markovian decision processes find application in problems where a decision is to be made on basis of previous outcomes.
 
 Here, algorithms for finding an optimal policy for a given MDP are implemented. The first part is to apply Linear Programming (LP) formulation and the second part is to implement three different variants of Policy Iteration (PI) viz. Howard's PI, Mansour and Singh's Randomised PI, and Batch-switching PI. Thereafter, the efficiency of these variants of PI are compared by running a set of experiments.
 *[Link to implementation](https://github.com/akshaykhadse/ReinforcementLearning/tree/master/Markovian-Decision-Processes)*
@@ -17,4 +17,3 @@ Here, algorithms for finding an optimal policy for a given MDP are implemented. 
 ## Upcomming
 
 - Q Learning
-- Multi Agent Systems
