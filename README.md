@@ -1,5 +1,5 @@
 # Reinforcement Learning
-This repo contains implementations of basic concepts dealt under the Rienforcement Learning umbrella
+This repo contains implementations of basic concepts dealt under the Reinforcement Learning umbrella
 
 ### [Multi Armed Bandits](Multi-Armed-Bandits#multi-armed-bandits)
 
