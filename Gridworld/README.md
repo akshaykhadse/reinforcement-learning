@@ -50,7 +50,7 @@ Similar procedure was followed for MDP 2 to find the optimal value of lambda as 
 
 ##### Tuning of epsilon for Q Learning on MDP instance 0
 
-![image](other-results/mdp0-tuning/qlearning/epsilon/results.png) ![image](other-results/3atatime/3-mdp0-qlearning-epsilon.png)
+![image](other-results/mdp0-tuning/qlearning/epsilon/results.png =100px) ![image](other-results/3atatime/3-mdp0-qlearning-epsilon.png =50%)
 
 For tuning the epsilon, the alpha was set to 0.1. Then, the epsilon was varied from 0.1 to 0.9 in steps of 0.1. For each value of epsilon the expected cumulative reward was plotted against the episode number on the same axes for comparison.
 
