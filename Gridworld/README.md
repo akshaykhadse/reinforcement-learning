@@ -39,41 +39,41 @@ The environment, which can be modeled by an MDP, is a grid world with a fixed st
               </td>
             </tr>
             <tr>
-              <td>`--ip`</td>
+              <td><code>--ip</code></td>
             </tr>
             <tr>
-              <td>`--port`</td>
+              <td><code>--port</code></td>
             </tr>
             <tr>
-              <td>`--side`</td>
+              <td><code>--side</code></td>
               <td>Side length of the square grid</td>
             </tr>
             <tr>
-              <td>`--instance`</td>
+              <td><code>--instance</code></td>
               <td>Instance number of the gridworld. The instance number fixes the start state, goal, and obstacles</td>
             </tr>
             <tr>
-              <td>`--maxlength`</td>
+              <td><code>--maxlength</code></td>
               <td>Maximum number of time steps in an episode. Set it to 1000 for your experiments</td>
             </tr>
             <tr>
-              <td>`--randomseed`</td>
+              <td><code>--randomseed</code></td>
               <td>Seed for RNG. This determines the permutation for state labels, and the actual environment dynamics</td>
             </tr>
             <tr>
-              <td>`--numepisodes`</td>
+              <td><code>--numepisodes</code></td>
               <td>Number of episodes to run</td>
             </tr>
             <tr>
-              <td>`--slip`</td>
+              <td><code>--slip</code></td>
               <td>How likely is it for the agent to slip. Fixed at 0.02 for evaluation. Can be set to 0 for debugging</td>
             </tr>
             <tr>
-              <td>`--noobfuscate`</td>
+              <td><code>--noobfuscate</code></td>
               <td>Turns off obfuscation (for debugging only)</td>
             </tr>
             <tr>
-              <td>`--quiet`</td>
+              <td><code>--quiet</code></td>
               <td>Suppresses detailed output. (Will make the code run a little faster)</td>
             </tr>
           </tbody>
@@ -98,25 +98,25 @@ The environment, which can be modeled by an MDP, is a grid world with a fixed st
               </td>
             </tr>
             <tr>
-              <td>`--ip`</td>
+              <td><code>--ip</code></td>
             </tr>
             <tr>
-              <td>`--port`</td>
+              <td><code>--port</code></td>
             </tr>
             <tr>
-              <td>`--algorithm`  </td>
+              <td><code>--algorithm</code></td>
               <td>The learning algorithm to be used. {`random`, `sarsa`, `qlearning`}</td>
             </tr>
             <tr>
-              <td>`--gamma`</td>
+              <td><code>--gamma</code></td>
               <td>Discount Factor</td>
             </tr>
             <tr>
-              <td>`--lambda`</td>
+              <td><code>--lambda</code></td>
               <td>This provides the value for &lambda; for the Sarsa algorithm</td>
             </tr>
             <tr>
-              <td>`--randomseed`</td>
+              <td><code>--randomseed</code></td>
               <td>Seed for RNG. Your agent must use this seed</td>
             </tr>
           </tbody>
@@ -129,25 +129,25 @@ The environment, which can be modeled by an MDP, is a grid world with a fixed st
 
 ### Results
 
-#### Expected cumulative reward against episode number for Q-learning and Sarsa (λ=0.8) for MDP instance 0
+#### Expected cumulative reward against episode number for Q-learning and Sarsa (&lambda;=0.8) for MDP instance 0
 
 ![image](results/mdp0/results.png)
 
 From the experiments carried out (explained further), optimal value of the &lambda; was found to be 0.8 for MDP instance 0. The optimal alpha was 0.8 and optimal epsilon was 0.2 for both the instances. The figure below shows the expected cumulative reward for gamma 1 vs the number of episodes for SARSA and Q Learning algorithms respectively on MDP instance 0.
 
-#### Expected cumulative reward against episode number for Q-learning and Sarsa(λ=0.85) for MDP instance 1
+#### Expected cumulative reward against episode number for Q-learning and Sarsa(&lambda;=0.85) for MDP instance 1
 
 ![image](results/mdp1/results.png)
 
 Likewise, optimal value of the &lambda; was found to be 0.85 for MDP instance 1. The optimal alpha was 0.8 and optimal epsilon was 0.2 for both the algorithms . The figure below shows the expected cumulative reward for gamma 1 vs the number of episodes for SARSA and Q Learning algorithms respectively on MDP instance 1.
 
-#### Expected cumulative reward over the first 500 episodes of training for Sarsa(λ) against λ for MDP instance 0
+#### Expected cumulative reward over the first 500 episodes of training for Sarsa(&lambda;) against &lambda; for MDP instance 0
 
 ![image](other-results/mdp0-tuning/sarsa/lambda/reward-vs-lambda.png)
 
 The procedure followed to tune the &lambda; value once alpha was fixed at 0.8 and epsilon was fixed at 0.2 was to plot the expected cumulative reward over first 500 episodes for SARSA on both the MDP instances. The figure below shows the variation expected cumulative reward as &lambda; is changed for MDP instance 0. The values of &lambda; used are more sparse as the likely distance from observed maxima goes increasing. The optimal value of &lambda; was found to be around 0.8 for MDP instance 0. This value is used in all the following experiments including the graph in section 1.
 
-#### Expected cumulative reward over the first 500 episodes of training for Sarsa(λ) against λ for MDP instance 1
+#### Expected cumulative reward over the first 500 episodes of training for Sarsa(&lambda;) against &lambda; for MDP instance 1
 
 ![image](other-results/mdp1-tuning/sarsa/lambda/reward-vs-lambda.png)
 
