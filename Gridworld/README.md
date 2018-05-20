@@ -12,6 +12,8 @@ The environment, which can be modeled by an MDP, is a grid world with a fixed st
 - Reaching the goal gives a reward of +100.
 - Reaching any other state gives a reward of -1.
 
+![image](gridworld.png)
+
 **Note:**
 
 - The algorithms must work for an arbitrary-sized grid. In these experiments, however, the grid is fixed to be of size 32 &times; 32.
@@ -156,8 +158,9 @@ Similar procedure was followed for MDP 2 to find the optimal value of lambda as 
 
 #### Tuning of epsilon for Q Learning on MDP instance 0
 
-| ![image](other-results/mdp0-tuning/qlearning/epsilon/results.png) | ![image](other-results/3atatime/3-mdp0-qlearning-epsilon.png) |
+| | |
 |:---:|:---:|
+| ![image](other-results/mdp0-tuning/qlearning/epsilon/results.png) | ![image](other-results/3atatime/3-mdp0-qlearning-epsilon.png) |
 | Figure 1 | Figure 2 |
 
 For tuning the epsilon, the alpha was set to 0.1. Then, the epsilon was varied from 0.1 to 0.9 in steps of 0.1. For each value of epsilon the expected cumulative reward was plotted against the episode number on the same axes for comparison.
@@ -166,24 +169,27 @@ But, due to noise, optimal epsilon is not clearly distinguishable. So, the the p
 
 #### Tuning of epsilon for Q Learning on MDP instance 1
 
-| ![image](other-results/mdp1-tuning/qlearning/epsilon/results.png) | ![image](other-results/3atatime/3-mdp1-qlearning-epsilon.png) |
+| | |
 |:---:|:---:|
+| ![image](other-results/mdp1-tuning/qlearning/epsilon/results.png) | ![image](other-results/3atatime/3-mdp1-qlearning-epsilon.png) |
 | Figure 3 | Figure 4 |
 
 Same procedure as above was followed for rest of the experiments for tuning the epsilon across MDP instances 0 and 1. A suitable epsilon was found to be 0.2.
 
 #### Tuning of epsilon for SARSA on MDP instance 0
 
-| ![image](other-results/mdp0-tuning/sarsa/epsilon/results.png) | ![image](other-results/3atatime/3-mdp0-sarsa-epsilon.png) |
+| | |
 |:---:|:---:|
+| ![image](other-results/mdp0-tuning/sarsa/epsilon/results.png) | ![image](other-results/3atatime/3-mdp0-sarsa-epsilon.png) |
 | Figure 5 | Figure 6 |
 
 By applying the same hypothesis, while keeping alpha to be 0.1 and lambda 0, 0.2 was found out to be the suitable epsilon. The trace was kept as replace. This is compared with accumulating trace at the end.
 
 #### Tuning of epsilon for SARSA on MDP instance 1
 
-| ![image](other-results/mdp1-tuning/sarsa/epsilon/results.png) | ![image](other-results/3atatime/3-mdp1-sarsa-epsilon.png) |
+| | |
 |:---:|:---:|
+| ![image](other-results/mdp1-tuning/sarsa/epsilon/results.png) | ![image](other-results/3atatime/3-mdp1-sarsa-epsilon.png) |
 | Figure 7 | Figure 8|
 
 Alpha was kept at 0.2, lambda was kept at 0 and trace set to replace, to get epsilon as 0.2 using the above described procedure.
@@ -203,8 +209,9 @@ For tuning the alpha, epsilon was set to the value found in previous section i.e
 
 #### Tuning of alpha for Q Learning on MDP instance 1
 
-|![image](other-results/mdp1-tuning/qlearning/alpha/results.png) | ![image](other-results/3atatime/3-mdp1-qlearning-alpha.png) |
+| | |
 |:---:|:---:|
+|![image](other-results/mdp1-tuning/qlearning/alpha/results.png) | ![image](other-results/3atatime/3-mdp1-qlearning-alpha.png) |
 | Figure 12 | Figure 13 |
 | ![image](other-results/2atatime/2-mdp1-qlearning-alpha.png) | |
 | Figure 14 | |
@@ -213,40 +220,40 @@ The same procedure was followed for MDP instance 1 with epsilon 0.2 and alpha wa
 
 #### Tuning of alpha for SARSA on MDP instance 0
 
-| ![image](other-results/mdp0-tuning/sarsa/alpha/results.png) | ![image](other-results/3atatime/3-mdp0-sarsa-alpha.png) |
+| | |
 |:---:|:---:|
+| ![image](other-results/mdp0-tuning/sarsa/alpha/results.png) | ![image](other-results/3atatime/3-mdp0-sarsa-alpha.png) |
 | Figure 15 | Figure 16 |
-
-| ![image](other-results/2atatime/2-mdp0-sarsa-alpha.png) |
-|:---:|
-| Figure17 |
+| ![image](other-results/2atatime/2-mdp0-sarsa-alpha.png) | |
+| Figure17 | |
 
 Similar procedure was applied for SARSA instances. Epsilon was kept to be 0.2, lambda to be 0 and the trace was defaulted to replace. The suitable value of alpha turned out to be 0.8
 
 #### Tuning of alpha for SARSA on MDP instance 1
 
-| ![image](other-results/mdp1-tuning/sarsa/alpha/results.png) | ![image](other-results/3atatime/3-mdp1-sarsa-alpha.png) |
+| | |
 |:---:|:---:|
+| ![image](other-results/mdp1-tuning/sarsa/alpha/results.png) | ![image](other-results/3atatime/3-mdp1-sarsa-alpha.png) |
 | Figure 18 | Figure 19 |
-
-| ![image](other-results/2atatime/2-mdp1-sarsa-alpha.png)|
-|:---:|
-| Figure 20 |
+| ![image](other-results/2atatime/2-mdp1-sarsa-alpha.png)| |
+| Figure 20 | |
 
 The same procedure with same parameters as above was applied here also to get alpha as 0.8.
 
 #### Lambda tuning of SARSA on MDP instance 0
 
-| ![image](other-results/mdp0-tuning/sarsa/lambda/reward-vs-lambda.png) | ![image](other-results/mdp0-tuning/sarsa/lambda/results.png) |
+| | |
 |:---:|:---:|
+| ![image](other-results/mdp0-tuning/sarsa/lambda/reward-vs-lambda.png) | ![image](other-results/mdp0-tuning/sarsa/lambda/results.png) |
 | Figure 21 | Figure 22 |
 
 The lambda was tuned based on the requirement of the assignment to plot expected cumulative reward for first 500 episodes against lambda. To get more insight however, the trend of expected cumulative reward for the same 500 episodes was plotted against the episode number for each lambda and is shown in figure 22. The maximum expected cumulative reward for MDP instance 0 was found to be at lambda 0.8. This was selected as the optimal value of lambda.
 
 #### Lambda tuning of SARSA on MDP instance 1
 
-| ![image](other-results/mdp1-tuning/sarsa/lambda/reward-vs-lambda.png) | ![image](other-results/mdp1-tuning/sarsa/lambda/results.png) |
+| | |
 |:---:|:---:|
+| ![image](other-results/mdp1-tuning/sarsa/lambda/reward-vs-lambda.png) | ![image](other-results/mdp1-tuning/sarsa/lambda/results.png) |
 | Figure 23 | Figure 24 |
 
 As in the section 5. A., here optimal value of lambda was found to be 0.85 from figure 23.
@@ -257,8 +264,9 @@ As in the section 5. A., here optimal value of lambda was found to be 0.85 from 
 
 An experiment was carried out to spot the effect of annealing of epsilon on the Q Learning algorithm. Figures 25 and 26 show the expected cumulative reward vs the episode number under annealing and in its absence for MDP instances 0 and 1 respectively. In MDP instance 0, Annealing improves the performance slightly but no such conclusion can be drawn from the MDP instance 1. Hence, annealing was not considered.
 
-| ![image](other-results/comparison-results/mdp0/qlearning/results.png) | ![image](other-results/comparison-results/mdp1/qlearning/results.png) |
+| | |
 |:---:|:---:|
+| ![image](other-results/comparison-results/mdp0/qlearning/results.png) | ![image](other-results/comparison-results/mdp1/qlearning/results.png) |
 | Figure 25 | Figure 26 |
 
 #### Comparison between variants of Comparison between variants of SARSA on basis of annealing and accumulating trace
@@ -266,8 +274,9 @@ An experiment was carried out to spot the effect of annealing of epsilon on the 
 Unlike above case, SARSA shows significant improvement when both annealing and
 accumulating trace are used, but the improvement in the MDP instance 1 is not significant. Also, the no annealing no accumulating trace is in between the both the extremes. Since, this agent is to be tested on random instances of this MDP, the annealing and accumulating traces were not used.
 
-| ![image](other-results/comparison-results/mdp0/sarsa/results.png) | ![image](other-results/comparison-results/mdp1/sarsa/results.png) |
+| | |
 |:---:|:---:|
+| ![image](other-results/comparison-results/mdp0/sarsa/results.png) | ![image](other-results/comparison-results/mdp1/sarsa/results.png) |
 | Figure 27 | Figure 28 |
 
 ### Observations
