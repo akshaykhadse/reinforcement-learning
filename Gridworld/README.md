@@ -193,11 +193,8 @@ Since, the optimal value of epsilon is not clearly distinguishable and lies arou
 #### Tuning of alpha for Q Learning on MDP instance 0
 
 | ![image](other-results/mdp0-tuning/qlearning/alpha/results.png) | ![image](other-results/3atatime/3-mdp0-qlearning-alpha.png) |
-|:---:|:---:|
 | Figure 9 | Figure 10 |
-
 | ![image](other-results/2atatime/2-mdp0-qlearning-alpha.png) | |
-|:---:|:---:|
 | Figure 11 | |
 
 For tuning the alpha, epsilon was set to the value found in previous section i.e. 0.2. The alpha was varied from 0.1 to 0.9 in steps of 0.1 and at each step the expected cumulative reward was plotted against the episode number on the same axes for the sake of comparison. To get a better idea of the trend of the alpha, plots for suboptimal values of alpha were removed and the remaining plots nearly coincided. The individual plots for each alpha (all the plots not included in the report are available on the link at the end of this report) were then checked to arrive at a suitable value of alpha as 0.8.
