@@ -20,42 +20,230 @@ The environment, which can be modeled by an MDP, is a grid world with a fixed st
 
 ### Code
 
-
+<div markdown="1">
+<table>
+  <tbody>
+    <tr>
+      <td width="40%" align="justify">
+        <h3> server </h3>
+        <p>The <code>server</code> directory comprises the code to simulate the MDP, in other words the "environment". The server waits for a client ("agent") to connect with it and start taking actions in sequence. Initially, by requesting "info" from the server, the client can get to know the number of states in the task, as well as the current state of the agent. Thereafter, for each action, the server generates a reward and a next state based on the current state and the chosen action, which is communicated back to the agent. Agent-server communication happens through a TCP connection. The server is coded in Python3. It can be tarted by calling <code>python3 server.py</code> with the appropriate parameters.</p>
+        <p>After a complete run, the server prints (to <code>stdout</code>) the per episode reward obtained by the client agent, along with the number of episodes completed.</p>
+      </td>
+      <td width="60%">
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <h4>Parameters to <code>server.py</code></h4>
+              </td>
+            </tr>
+            <tr>
+              <td>--ip         </td>
+            </tr>
+            <tr>
+              <td>--port       </td>
+            </tr>
+            <tr>
+              <td>--side       </td>
+              <td>Side length of the square grid</td>
+            </tr>
+            <tr>
+              <td>--instance   </td>
+              <td>Instance number of the gridworld. The instance number fixes the start state, goal, and obstacles</td>
+            </tr>
+            <tr>
+              <td>--maxlength  </td>
+              <td>Maximum number of time steps in an episode. Set it to 1000 for your experiments</td>
+            </tr>
+            <tr>
+              <td>--randomseed </td>
+              <td>Seed for RNG. This determines the permutation for state labels, and the actual environment dynamics</td>
+            </tr>
+            <tr>
+              <td>--numepisodes</td>
+              <td>Number of episodes to run</td>
+            </tr>
+            <tr>
+              <td>--slip       </td>
+              <td>How likely is it for the agent to slip. Fixed at 0.02 for evaluation. Can be set to 0 for debugging</td>
+            </tr>
+            <tr>
+              <td>--noobfuscate  </td>
+              <td>Turns off obfuscation (for debugging only)</td>
+            </tr>
+            <tr>
+              <td>--quiet      </td>
+              <td>Suppresses detailed output. (Will make the code run a little faster)</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<table>
+  <tbody>
+    <tr>
+      <td width="40%" align="justify">
+        <h3> client </h3>
+        <p>The <code>client</code> directory is provided to you as an example of what your submission must achieve. The client is the agent that implements learning algorithms. <code>client.py</code> handles the networking. The agent provided to you in <code>agent.py</code> merely samples the actions in a round-robin fashion: you will have to implement more efficient learning algorithms.</p>
+      </td>
+      <td width="60%">
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <h4>Parameters to <code>client.py</code></h4>
+              </td>
+            </tr>
+            <tr>
+              <td>--ip         </td>
+            </tr>
+            <tr>
+              <td>--port       </td>
+            </tr>
+            <tr>
+              <td>--algorithm  </td>
+              <td>The learning algorithm to be used. {random, sarsa, qlearning}</td>
+            </tr>
+            <tr>
+              <td>--gamma      </td>
+              <td>Discount Factor</td>
+            </tr>
+            <tr>
+              <td>--lambda     </td>
+              <td>This provides the value for $\lambda$ for the Sarsa algorithm</td>
+            </tr>
+            <tr>
+              <td>--randomseed </td>
+              <td>Seed for RNG. Your agent must use this seed</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div>
 
 ### Results
 
-##### Expected cumulative reward against episode number for Q-learning and Sarsa (λ=0.8) for MDP instance 0
+#### Expected cumulative reward against episode number for Q-learning and Sarsa (λ=0.8) for MDP instance 0
 
 ![image](results/mdp0/results.png)
 
 From the experiments carried out (explained further), optimal value of the lambda was found to be 0.8 for MDP instance 0. The optimal alpha was 0.8 and optimal epsilon was 0.2 for both the instances. The figure below shows the expected cumulative reward for gamma 1 vs the number of episodes for SARSA and Q Learning algorithms respectively on MDP instance 0.
 
-##### Expected cumulative reward against episode number for Q-learning and Sarsa(λ=0.85) for MDP instance 1
+#### Expected cumulative reward against episode number for Q-learning and Sarsa(λ=0.85) for MDP instance 1
 
 ![image](results/mdp1/results.png)
 
 Likewise, optimal value of the lambda was found to be 0.85 for MDP instance 1. The optimal alpha was 0.8 and optimal epsilon was 0.2 for both the algorithms . The figure below shows the expected cumulative reward for gamma 1 vs the number of episodes for SARSA and Q Learning algorithms respectively on MDP instance 1.
 
-##### Expected cumulative reward over the first 500 episodes of training for Sarsa(λ) against λ for MDP instance 0
+#### Expected cumulative reward over the first 500 episodes of training for Sarsa(λ) against λ for MDP instance 0
 
 ![image](other-results/mdp0-tuning/sarsa/lambda/reward-vs-lambda.png)
 
 The procedure followed to tune the lambda value once alpha was fixed at 0.8 and epsilon was fixed at 0.2 was to plot the expected cumulative reward over first 500 episodes for SARSA on both the MDP instances. The figure below shows the variation expected cumulative reward as lambda is changed for MDP instance 0. The values of lambda used are more sparse as the likely distance from observed maxima goes increasing. The optimal value of lambda was found to be around 0.8 for MDP instance 0. This value is used in all the following experiments including the graph in section 1.
 
-##### Expected cumulative reward over the first 500 episodes of training for Sarsa(λ) against λ for MDP instance 1
+#### Expected cumulative reward over the first 500 episodes of training for Sarsa(λ) against λ for MDP instance 1
 
 ![image](other-results/mdp1-tuning/sarsa/lambda/reward-vs-lambda.png)
 
 Similar procedure was followed for MDP 2 to find the optimal value of lambda as shown in figure below. The optimal value of lambda was found to be around 0.85 for MDP instance 1.
 
-##### Tuning of epsilon for Q Learning on MDP instance 0
+### Tuning
 
-![image](other-results/mdp0-tuning/qlearning/epsilon/results.png | width=50) ![image](other-results/3atatime/3-mdp0-qlearning-epsilon.png | width=50%)
+#### Tuning of epsilon for Q Learning on MDP instance 0
+
+![image](other-results/mdp0-tuning/qlearning/epsilon/results.png) ![image](other-results/3atatime/3-mdp0-qlearning-epsilon.png)
 
 For tuning the epsilon, the alpha was set to 0.1. Then, the epsilon was varied from 0.1 to 0.9 in steps of 0.1. For each value of epsilon the expected cumulative reward was plotted against the episode number on the same axes for comparison.
 
 But, due to noise, optimal epsilon is not clearly distinguishable. So, the the plots for suboptimal epsilons were removed. The plots for epsilons 0.1, 0.2 and 0.3 are nearly identical. Hence, individual plots for each epsilon (all the plots not included in the report are available on the link at the end of this report) were then checked to arrive at a moderate value of epsilon as 0.2.
 
+#### Tuning of epsilon for Q Learning on MDP instance 1
+
+![image](other-results/mdp1-tuning/qlearning/epsilon/results.png) ![image](other-results/3atatime/3-mdp1-qlearning-epsilon.png)
+
+Same procedure as above was followed for rest of the experiments for tuning the epsilon across MDP instances 0 and 1. A suitable epsilon was found to be 0.2.
+
+#### Tuning of epsilon for SARSA on MDP instance 0
+
+![image](other-results/mdp0-tuning/sarsa/epsilon/results.png) ![image](other-results/3atatime/3-mdp0-sarsa-epsilon.png)
+
+By applying the same hypothesis, while keeping alpha to be 0.1 and lambda 0, 0.2 was found out to be the suitable epsilon. The trace was kept as replace. This is compared with accumulating trace at the end.
+
+#### Tuning of epsilon for SARSA on MDP instance 1
+
+![image](other-results/mdp1-tuning/sarsa/epsilon/results.png) ![image](other-results/3atatime/3-mdp1-sarsa-epsilon.png)
+
+Alpha was kept at 0.2, lambda was kept at 0 and trace set to replace, to get epsilon as 0.2 using the above described procedure.
+
+Since, the optimal value of epsilon is not clearly distinguishable and lies around 0.2 in each case, this was set to be the default value of epsilon in client.py . All the tuned options hereafter are set as default in `client.py`.
+
+#### Tuning of alpha for Q Learning on MDP instance 0
+
+![image](other-results/mdp0-tuning/qlearning/alpha/results.png) ![image](other-results/3atatime/3-mdp0-qlearning-alpha.png)
+![image](other-results/2atatime/2-mdp0-qlearning-alpha.png)
+
+For tuning the alpha, epsilon was set to the value found in previous section i.e. 0.2. The alpha was varied from 0.1 to 0.9 in steps of 0.1 and at each step the expected cumulative reward was plotted against the episode number on the same axes for the sake of comparison. To get a better idea of the trend of the alpha, plots for suboptimal values of alpha were removed and the remaining plots nearly coincided. The individual plots for each alpha (all the plots not included in the report are available on the link at the end of this report) were then checked to arrive at a suitable value of alpha as 0.8.
+
+#### Tuning of alpha for Q Learning on MDP instance 1
+
+![image](other-results/mdp1-tuning/qlearning/alpha/results.png) ![image](other-results/3atatime/3-mdp1-qlearning-alpha.png)
+![image](other-results/2atatime/2-mdp1-qlearning-alpha.png)
+
+The same procedure was followed for MDP instance 1 with epsilon 0.2 and alpha was chosen to be 0.8.
+
+#### Tuning of alpha for SARSA on MDP instance 0
+
+![image](other-results/mdp0-tuning/sarsa/alpha/results.png) ![image](other-results/3atatime/3-mdp0-sarsa-alpha.png)
+![image](other-results/2atatime/2-mdp0-sarsa-alpha.png)
+
+Similar procedure was applied for SARSA instances. Epsilon was kept to be 0.2, lambda to be 0 and the trace was defaulted to replace. The suitable value of alpha turned out to be 0.8
+
+#### Tuning of alpha for SARSA on MDP instance 1
+
+![image](other-results/mdp1-tuning/sarsa/alpha/results.png) ![image](other-results/3atatime/3-mdp1-sarsa-alpha.png)
+![image](other-results/2atatime/2-mdp1-sarsa-alpha.png)
+
+The same procedure with same parameters as above was applied here also to get alpha as 0.8.
+
+#### Lambda tuning of SARSA on MDP instance 0
+
+![image](other-results/mdp0-tuning/sarsa/lambda/reward-vs-lambda.png) ![image](other-results/mdp0-tuning/sarsa/lambda/results.png)
+
+The lambda was tuned based on the requirement of the assignment to plot expected cumulative reward for first 500 episodes against lambda. To get more insight however, the trend of expected cumulative reward for the same 500 episodes was plotted against the episode number for each lambda and is shown in figure 22. The maximum expected cumulative reward for MDP instance 0 was found to be at lambda 0.8. This was selected as the optimal value of lambda.
+
+#### Lambda tuning of SARSA on MDP instance 1
+
+![image](other-results/mdp1-tuning/sarsa/lambda/reward-vs-lambda.png) ![image](other-results/mdp1-tuning/sarsa/lambda/results.png)
+
+As in the section 5. A., here optimal value of lambda was found to be 0.85 from figure 23.
+
+### Comparison
+
+#### Comparison between variants of Q Learning on basis of annealing
+
+An experiment was carried out to spot the effect of annealing of epsilon on the Q Learning algorithm. Figures 25 and 26 show the expected cumulative reward vs the episode number under annealing and in its absence for MDP instances 0 and 1 respectively. In MDP instance 0, Annealing improves the performance slightly but no such conclusion can be drawn from the MDP instance 1. Hence, annealing was not considered.
+
+![image](other-results/comparison-results/mdp0/qlearning/results.png) ![image](other-results/comparison-results/mdp1/qlearning/results.png)
+
+#### Comparison between variants of Comparison between variants of SARSA on basis of annealing and accumulating trace
+
+Unlike above case, SARSA shows significant improvement when both annealing and
+accumulating trace are used, but the improvement in the MDP instance 1 is not significant. Also, the no annealing no accumulating trace is in between the both the extremes. Since, this agent is to be tested on random instances of this MDP, the annealing and accumulating traces were not used.
+
+| ![image](other-results/comparison-results/mdp0/sarsa/results.png) | ![image](other-results/comparison-results/mdp1/sarsa/results.png) |
+|:---:|:---:|
+| Figure 27 | Figure 28 |
+
+### Observations
+
+- From section 1 it was observed that with proper tuning, SARSA(lambda) performs better than Q Learning for the same MDP. SARSA converges quickly than Q learning but leaves some margin for improvement w.r.t Q Learning in MDP instance 0.
+- From section 2, it was observed that as lambda is increased, the expected cumulative reward increases upto a certain lambda, then it decreases even more as lambda approaches 1. This optimal lambda changes if the learning rate alpha changes.
+- The noise in plots after 50 trials is more pronounced in MDP instance 1 which makes the tuning difficult. The number of trials for MDP 1, therefore should be more than 50.
 
 
 ### References
