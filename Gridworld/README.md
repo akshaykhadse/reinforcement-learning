@@ -194,8 +194,8 @@ Since, the optimal value of epsilon is not clearly distinguishable and lies arou
 
 | ![image](other-results/mdp0-tuning/qlearning/alpha/results.png) | ![image](other-results/3atatime/3-mdp0-qlearning-alpha.png) |
 |:---:|:---:|
-
 | Figure 9 | Figure 10 |
+
 | ![image](other-results/2atatime/2-mdp0-qlearning-alpha.png) | |
 |:---:|:---:|
 | Figure 11 | |
@@ -208,7 +208,6 @@ For tuning the alpha, epsilon was set to the value found in previous section i.e
 |:---:|:---:|
 | Figure 12 | Figure 13 |
 | ![image](other-results/2atatime/2-mdp1-qlearning-alpha.png) | |
-|:---:|:---:|
 | Figure 14 | |
 
 The same procedure was followed for MDP instance 1 with epsilon 0.2 and alpha was chosen to be 0.8.
