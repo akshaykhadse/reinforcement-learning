@@ -22,7 +22,7 @@ The learning and exploration rates are tuned to achieve the best performance. Th
 For Sarsa, the replacing-trace method as well as the accumulating-trace method is implemented.
 *[Link to implementation](https://github.com/akshaykhadse/reinforcement-learning/tree/master/Gridworld)*
 
-### [Baird's Counterexample](Baird's-Counterexample#baird's-counterexample)
+### [Baird's Counterexample](Bairds-Counterexample#bairds-counterexample)
 
 This section describes implementation of on-line TD algorithms with linear function approximation. It highlights the issues arising in online algorithms used in conjunction with function approximation.
-*[Link to implementation](https://github.com/akshaykhadse/reinforcement-learning/tree/master/Baird's-Counterexample)*
+*[Link to implementation](https://github.com/akshaykhadse/reinforcement-learning/tree/master/Bairds-Counterexample)*
