@@ -15,13 +15,14 @@ Here, algorithms for finding an optimal policy for a given MDP are implemented. 
 
 ### [Gridworld](Gridworld#gridworld)
 
-This repo contains implementions and comparison of Sarsa(&lambda;) and Q-learning.
+This section contains implementions and comparison of Sarsa(&lambda;) and Q-learning.
 
 The learning and exploration rates are tuned to achieve the best performance. The systematic procedure for tuning the hyperparameters is discussed in the report.
 
 For Sarsa, the replacing-trace method as well as the accumulating-trace method is implemented.
 *[Link to implementation](https://github.com/akshaykhadse/reinforcement-learning/tree/master/Gridworld)*
 
-## Upcomming
+### [Baird's Counterexample](Baird's-Counterexample#baird's-counterexample)
 
-- Baird's Counterexample
+This section describes implementation of on-line TD algorithms with linear function approximation. It highlights the issues arising in online algorithms used in conjunction with function approximation.
+*[Link to implementation](https://github.com/akshaykhadse/reinforcement-learning/tree/master/Baird's-Counterexample)*
